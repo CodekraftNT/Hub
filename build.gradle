@@ -1,21 +1,41 @@
+/*
+ * Build Script For Simple Hub
+ */
+
+task wrapper(type: Wrapper) {
+	gradleVersion = "2.4"
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-sourceCompatibility = 1.5
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 version = '1.0'
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Gradle Quickstart',
+        attributes 'Implementation-Title': 'Simple Hub',
                    'Implementation-Version': version
     }
 }
 
 repositories {
     mavenCentral()
+    maven {
+    	name = "spigot-repo"
+    	url = "https://hub.spigotmc.org/nexus/content/groups/public/"
+    }
+    
+    maven {
+    	name = "sonotype"
+    	url = "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
 }
 
 dependencies {
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    compile name: "spigot-api", group: "org.spigotmc", version: "1.8.7-R0.1-SNAPSHOT"
+    compile name: "bungeecord-chat", group: "net.md-5", version: "1.8-SNAPSHOT"
     testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 
