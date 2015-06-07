@@ -2,9 +2,8 @@ package net.codekrafter.plugins.simplehub;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import net.codekrafter.plugins.inventory.InventoryListener;
+import net.codekrafter.plugins.simplehub.inventory.HubListener;
 import net.codekrafter.plugins.simplehub.tasks.SaveTask;
 import net.codekrafter.plugins.utils.ColorParser;
 
@@ -14,21 +13,22 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 public class SimpleHub extends JavaPlugin {
 
 	public FileConfiguration config = getConfig();
 	public static String prefix = ColorParser.parse("&6[&3Simple&b&lHub&6]");
-	public static List<UUID> inLobby = new ArrayList<UUID>();
+	public static List<String> inLobby = new ArrayList<String>();
 	public SaveTask saveTask = new SaveTask(this);
 
 	@Override
 	public void onEnable() {
 		manageConfig();
-		getServer().getPluginManager().registerEvents(new InventoryListener(),
-				this);
-		BukkitTask task = new SaveTask(this).runTaskLater(this, 1200);
+		getServer().getPluginManager().registerEvents(new HubListener(), this);
+		SaveTask st = new SaveTask(this);
+		st.runTaskTimer(this, 0, 60 * 20 * 5);
+		/*TickTask tt = new TickTask();
+		tt.runTaskTimer(this, 0, 0);*/
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class SimpleHub extends JavaPlugin {
 		saveConfigItems();
 		saveConfig();
 	}
-	
+
 	public void saveTheConfig() {
 		saveConfigItems();
 		saveConfig();
@@ -57,13 +57,13 @@ public class SimpleHub extends JavaPlugin {
 	@SuppressWarnings("unchecked")
 	private void getValues() {
 		prefix = ColorParser.parse(config.getString("prefix"));
-		inLobby = (List<UUID>) config.getList("inHub");
+		inLobby = (List<String>) config.getList("inHub");
 
 	}
 
 	private void addDefaults() {
 		config.addDefault("prefix", "&6[&3Simple&b&lHub&6]");
-		config.addDefault("inHub", new ArrayList<UUID>());
+		config.addDefault("inHub", new ArrayList<String>());
 	}
 
 	@SuppressWarnings("null")
@@ -93,12 +93,12 @@ public class SimpleHub extends JavaPlugin {
 			}
 			if (targetBoolean) {
 				output = true;
-				if (inLobby.contains(targetP.getUniqueId())) {
+				if (inLobby.contains(targetP.getUniqueId().toString())) {
 					sender.sendMessage(prefix + " "
 							+ ColorParser.parse("&cPlayer Already In Hub"));
 					output = true;
 				} else {
-					inLobby.add(targetP.getUniqueId());
+					inLobby.add(targetP.getUniqueId().toString());
 					sender.sendMessage(prefix
 							+ " "
 							+ ColorParser
@@ -107,8 +107,8 @@ public class SimpleHub extends JavaPlugin {
 				}
 			} else if (!targetBoolean) {
 				output = true;
-				if (inLobby.contains(targetP.getUniqueId())) {
-					inLobby.remove(targetP.getUniqueId());
+				if (inLobby.contains(targetP.getUniqueId().toString())) {
+					inLobby.remove(targetP.getUniqueId().toString());
 					sender.sendMessage(prefix
 							+ " "
 							+ ColorParser
