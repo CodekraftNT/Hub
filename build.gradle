@@ -30,13 +30,22 @@ repositories {
     	name = "sonotype"
     	url = "https://oss.sonatype.org/content/repositories/snapshots/"
     }
+    
+    maven {
+    	name = "sonotype-public"
+    	url = "https://oss.sonatype.org/content/repositories/public/"
+    }
+    
+    flatDir name: "lib", dirs: "${rootProject.projectDir}/lib"
 }
 
 dependencies {
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
     compile name: "spigot-api", group: "org.spigotmc", version: "1.8.7-R0.1-SNAPSHOT"
     compile name: "bungeecord-chat", group: "net.md-5", version: "1.8-SNAPSHOT"
+    compile name: "snakeyaml", group: "org.yaml", version: "1.16-SNAPSHOT"
     testCompile group: 'junit', name: 'junit', version: '4.+'
+    compile name: "BountifulAPI"
 }
 
 test {
@@ -49,4 +58,11 @@ uploadArchives {
            dirs 'repos'
        }
     }
+}
+
+task push(type: Copy, dependsOn: 'build') {
+	from("build/libs") {
+	 include '*.jar'
+	}
+	into "/Users/edds/Desktop/Servers/newServer/plugins"
 }

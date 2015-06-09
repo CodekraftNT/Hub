@@ -2,9 +2,15 @@ name: SimpleHub
 main: net.codekrafter.plugins.simplehub.SimpleHub
 version: 0.0.1
 commands:
-    testcolorcmd:
-          description: This is a demo command, for testing color parsing, will retrun the message you give it, all formatted.
-          usage: /testcolorcmd <message>
-    setinhub:
-          description: sets wether or not a player is "in the hub"
-          usage: /setinhub <player> <true/false>
+    sh:
+          description: The Base Simple Hub Command
+          usage: /sh <subcommands>
+    simplehub:
+          description: The Base Simple Hub Command
+          usage: /simplehub <subcommands>
+    simpleh:
+          description: The Base Simple Hub Command
+          usage: /simpleh <subcommands>
+    shub:
+          description: The Base Simple Hub Command
+          usage: /shub <subcommands>

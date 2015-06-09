@@ -15,7 +15,7 @@ public class SaveTask extends BukkitRunnable {
 	@Override
 	public void run() {
 		plugin.getServer().broadcastMessage(
-				SimpleHub.prefix + " " + ColorParser.parse("&aSimple Hub Save Commencing...."));
+				SimpleHub.prefix + " " + ColorParser.parse("&8Simple Hub Save Commencing...."));
 		plugin.saveTheConfig();
 	}
 }
