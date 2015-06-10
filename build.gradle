@@ -2,20 +2,12 @@
  * Build Script For Simple Hub
  */
 
-buildscript {
-    repositories {
-        jcenter()
-        mavenLocal()
-    }
-
-    dependencies {
-        classpath group: 'com.github.jengelman.gradle.plugins', name: 'shadow', version: '0.8'
-    }
+plugins {
+	id 'java'
+	id'eclipse'
+	id 'com.github.johnrengelman.shadow' version '1.2.1'
+	//id "com.github.hierynomus.license" version "0.11.0"
 }
-
-apply plugin: 'java'
-apply plugin:'eclipse'
-apply plugin: 'shadow'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -23,9 +15,11 @@ version = '1.0'
 jar {
     manifest {
         attributes 'Implementation-Title': 'Simple Hub',
-                   'Implementation-Version': version
+                   'Implementation-Version': version,
+                   'Test-Entry': 'PASSED'
     }
 }
+
 
 repositories {
     mavenCentral()
@@ -86,16 +80,13 @@ uploadArchives {
     }
 }
 
-shadow {
-
-    filter('org.bukkit:bukkit') {
-        exclude '**'
+shadowJar {
+    dependencies {
+    	exclude(dependency ('org.bukkit:bukkit'))
     }
 
-    relocation {
-        pattern = 'org.mcstats'
-        shadedPattern = 'net.codekrafter.plugins.simplehub'
-    }
+    relocate 'org.mcstats', 'net.codekrafter.plugins.simplehub.mcstats'
+    relocate 'net.gravitydevelopment.updater', 'net.codekrafter.plugins.simplehub.updater'
 
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
