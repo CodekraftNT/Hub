@@ -2,6 +2,7 @@
 package net.codekrafter.plugins.simplehub;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,11 @@ import net.codekrafter.plugins.simplehub.tasks.SaveTask;
 import net.codekrafter.plugins.utils.ColorParser;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.Yaml;
 
@@ -40,6 +43,8 @@ public class SimpleHub extends JavaPlugin
 		getServer().getPluginCommand("sh")
 				.setExecutor(new CommandManager(this));
 		List<String> commands = new ArrayList<String>();
+		// Updater updater = new Updater(this, TODO DBO, this.getFile(),
+		// Updater.UpdateType.DEFAULT, false);
 		commands.add("sh");
 		commands.add("simplehub");
 		commands.add("simpleh");
@@ -56,17 +61,38 @@ public class SimpleHub extends JavaPlugin
 		/*
 		 * TickTask tt = new TickTask(); tt.runTaskTimer(this, 0, 0);
 		 */
+		Game g1 = new Game(new ItemStack(Material.NETHER_STAR),
+				"warp ${username} testWarp", "&lTest Game (testWarp)",
+				"Warps You To &ltestWarp", true);
+		games.add(g1);
+		try
+		{
+			loadFiles();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @author codekrafter
+	 */
+	private void loadFiles() throws IOException
+	{
 		if (!gamesFile.exists())
 		{
-			try
-			{
-				gamesFile.createNewFile();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			gamesFile.createNewFile();
 		}
+		FileOutputStream gamesOut = new FileOutputStream(gamesFile);
+		String s = "";
+		for (Game g : games)
+		{
+			s = s + yaml.dump(g.getContentsMap());
+		}
+		byte[] bytes = s.getBytes();
+		gamesOut.write(bytes);
+		gamesOut.close();
 	}
 
 	@Override
@@ -77,7 +103,7 @@ public class SimpleHub extends JavaPlugin
 		String gamesString = "";
 		for (Game g : games)
 		{
-			gamesString = gamesString + yaml.dump(g.getMap());
+			gamesString = gamesString + yaml.dump(g.getContentsMap());
 		}
 
 	}
