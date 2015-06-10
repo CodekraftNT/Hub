@@ -16,14 +16,9 @@ buildscript {
 apply plugin: 'java'
 apply plugin:'eclipse'
 apply plugin: 'shadow'
-apply plugin: 'checkstyle'
-
-checkstyle {
-       configFile = new File(rootDir, "checkstyle.xml")
-    }
 
 sourceCompatibility = 1.8
-targetCompatibility = 1.7
+targetCompatibility = 1.8
 version = '1.0'
 jar {
     manifest {
