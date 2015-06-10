@@ -20,6 +20,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 import org.yaml.snakeyaml.Yaml;
 
 public class SimpleHub extends JavaPlugin
@@ -72,6 +73,18 @@ public class SimpleHub extends JavaPlugin
 		catch (IOException e)
 		{
 			e.printStackTrace();
+		}
+
+		//mcstats
+		try
+		{
+			Metrics metrics = new Metrics(this);
+			metrics.start();
+			getServer().broadcastMessage(ColorParser.parse(prefix + " Started Metrics at http://mcstats.org/plugin/SimpleHub"));
+		}
+		catch (IOException e)
+		{
+			getServer().broadcastMessage(ColorParser.parse(prefix + " &4Failed To Submit Stats"));
 		}
 	}
 
