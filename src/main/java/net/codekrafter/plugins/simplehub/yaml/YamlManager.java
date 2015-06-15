@@ -1,6 +1,5 @@
-// Change this to your plugins package.
 
-package net.codekrafter.plugins.simplehub.yamlhelper;
+package net.codekrafter.plugins.simplehub.yaml;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,14 +11,14 @@ import net.codekrafter.plugins.simplehub.SimpleHub;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class CustomYML
+public class YamlManager
 {
 
 	public static SimpleHub plugin;
 
-	public CustomYML(SimpleHub plugin, String name)
+	public YamlManager(SimpleHub plugin, String name)
 	{
-		CustomYML.plugin = plugin;
+		YamlManager.plugin = plugin;
 		this.name = name;
 	}
 

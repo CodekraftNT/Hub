@@ -10,7 +10,7 @@ import net.codekrafter.plugins.Game;
 import net.codekrafter.plugins.simplehub.command.CommandManager;
 import net.codekrafter.plugins.simplehub.events.HubListener;
 import net.codekrafter.plugins.simplehub.tasks.SaveTask;
-import net.codekrafter.plugins.simplehub.yamlhelper.CustomYML;
+import net.codekrafter.plugins.simplehub.yaml.YamlManager;
 import net.codekrafter.plugins.utils.Parser;
 
 import org.bukkit.Bukkit;
@@ -37,7 +37,7 @@ public class SimpleHub extends JavaPlugin
 			InventoryType.PLAYER);
 	public static Yaml yaml = new Yaml();
 	public static List<Game> games = new ArrayList<Game>();
-	public CustomYML gamesFile = new CustomYML(this, "games");
+	public YamlManager gamesFile = new YamlManager(this, "games");
 	FileConfiguration gamesConfig = gamesFile.getCustomConfig();
 
 	@Override
