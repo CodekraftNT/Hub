@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.codekrafter.plugins.Game;
 import net.codekrafter.plugins.simplehub.SimpleHub;
-import net.codekrafter.plugins.utils.ColorParser;
+import net.codekrafter.plugins.utils.Parser;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -29,12 +30,15 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -52,7 +56,33 @@ public class HubListener implements Listener
 			{
 				e.setCancelled(true);
 				p.updateInventory();
-				updateInventory(p);
+				InventoryType type = e.getInventory().getType();
+				if (type == InventoryType.PLAYER)
+				{
+					e.setCancelled(true);
+					p.updateInventory();
+				}
+				else if (type == InventoryType.CHEST)
+				{
+					e.setCancelled(true);
+					p.updateInventory();
+					ItemStack is = e.getCurrentItem();
+					ItemMeta meta = is.getItemMeta();
+					Bukkit.getLogger().info(is.getType().name());
+					String name = meta.getDisplayName();
+					for (Game g : SimpleHub.games)
+					{
+						ItemStack is1 = g.getIs();
+						if (Parser.colorparse(is1.getItemMeta()
+								.getDisplayName()).equalsIgnoreCase(name));
+						{
+							Bukkit.getServer().dispatchCommand(
+									Bukkit.getServer().getConsoleSender(),
+									Parser.commandparse(g.getCommand(), p));
+							return;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -206,7 +236,7 @@ public class HubListener implements Listener
 		{
 			p.launchProjectile(Snowball.class);
 			ItemMeta meta = p.getItemInHand().getItemMeta();
-			meta.setDisplayName(ColorParser.parse(SimpleHub.prefix
+			meta.setDisplayName(Parser.colorparse(SimpleHub.prefix
 					+ " &8Fun Gun"));
 			p.getItemInHand().setItemMeta(meta);
 		}
@@ -219,10 +249,10 @@ public class HubListener implements Listener
 			{
 				hasHidden.remove(e.getPlayer().getName());
 				ItemMeta meta = p.getItemInHand().getItemMeta();
-				meta.setDisplayName(ColorParser
-						.parse("&9Magic Clock> &8Players Visible"));
+				meta.setDisplayName(Parser
+						.colorparse("&9Magic Clock> &8Players Visible"));
 				p.getItemInHand().setItemMeta(meta);
-				p.sendMessage(ColorParser.parse(SimpleHub.prefix
+				p.sendMessage(Parser.colorparse(SimpleHub.prefix
 						+ " &8Players Visible"));
 				for (Player p1 : Bukkit.getServer().getOnlinePlayers())
 				{
@@ -236,10 +266,10 @@ public class HubListener implements Listener
 			else
 			{
 				ItemMeta meta = p.getItemInHand().getItemMeta();
-				meta.setDisplayName(ColorParser
-						.parse("&9Magic Clock> &8Players Hidden"));
+				meta.setDisplayName(Parser
+						.colorparse("&9Magic Clock> &8Players Hidden"));
 				p.getItemInHand().setItemMeta(meta);
-				p.sendMessage(ColorParser.parse(SimpleHub.prefix
+				p.sendMessage(Parser.colorparse(SimpleHub.prefix
 						+ " Players Hidden"));
 				hasHidden.add(e.getPlayer().getName());
 				for (Player p1 : Bukkit.getServer().getOnlinePlayers())
@@ -255,11 +285,34 @@ public class HubListener implements Listener
 				&& p.getItemInHand().getType() == Material.COMPASS
 				&& (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK))
 		{
-			
+
 			ItemMeta meta = p.getItemInHand().getItemMeta();
-			meta.setDisplayName(ColorParser.parse(SimpleHub.prefix
+			meta.setDisplayName(Parser.colorparse(SimpleHub.prefix
 					+ " &8Game Selector"));
 			p.getItemInHand().setItemMeta(meta);
+			int size1 = SimpleHub.games.size();
+			int size = 9;
+			if (size1 < 1)
+			{
+				size = 9;
+			}
+			else if (size1 > 54)
+			{
+				size = 54;
+			}
+			else
+			{
+				size1 += 8;
+				size = size1 - (size1 % 9);
+			}
+			Inventory inv = Bukkit.createInventory(p, size,
+					Parser.colorparse("               &9&lGames"));
+			for (Game g : SimpleHub.games)
+			{
+				inv.addItem(g.getIs());
+			}
+			InventoryView invv = p.openInventory(inv);
+			return;
 		}
 	}
 
@@ -280,7 +333,7 @@ public class HubListener implements Listener
 	@EventHandler
 	public void PlayerJoin(PlayerJoinEvent e)
 	{
-		e.setJoinMessage(ColorParser.parse("&8[&2+&8] "
+		e.setJoinMessage(Parser.colorparse("&8[&2+&8] "
 				+ e.getPlayer().getName()));
 		for (Player p : Bukkit.getServer().getOnlinePlayers())
 		{
@@ -302,7 +355,7 @@ public class HubListener implements Listener
 	@EventHandler
 	public void PlayerLeave(PlayerQuitEvent e)
 	{
-		e.setQuitMessage(ColorParser.parse("&8[&4-&8] "
+		e.setQuitMessage(Parser.colorparse("&8[&4-&8] "
 				+ e.getPlayer().getName()));
 	}
 

@@ -4,7 +4,7 @@
 package net.codekrafter.plugins.simplehub.command;
 
 import net.codekrafter.plugins.simplehub.SimpleHub;
-import net.codekrafter.plugins.utils.ColorParser;
+import net.codekrafter.plugins.utils.Parser;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -21,6 +21,16 @@ public class CommandSetInv implements CommandModule {
 	private String name = "SetInv";
 	private String desc = "Set The Hub Inventory";
 	private String usage = "setinv";
+	private CommandManager cm;
+
+	/**
+	 * @author codekrafter
+	 * @param commandManager
+	 */
+	public CommandSetInv(CommandManager cm)
+	{
+		this.cm = cm;
+	}
 
 	@Override
 	public boolean run(CommandSender s, Command cmd, String l, String[] args) {

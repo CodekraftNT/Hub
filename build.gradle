@@ -53,6 +53,11 @@ repositories {
     	url = "http://repo.bukkit.org/content/groups/public/"
     }
     
+    maven {
+    	name = "shadowvolt-repo"
+    	url = "http://ci.shadowvolt.com/plugin/repository/everything/"
+    }
+    
     flatDir name: "lib", dirs: "${rootProject.projectDir}/lib"
 }
 
@@ -62,8 +67,8 @@ dependencies {
     compile name: "bungeecord-chat", group: "net.md-5", version: "1.8-SNAPSHOT"
     compile name: "snakeyaml", group: "org.yaml", version: "1.16-SNAPSHOT"
     compile name: "updater", group: "net.gravitydevelopment.updater", version: "2.1"
-    compile name: "bukkit", group: "org.bukkit", version: "1.6.4-R2.0"
-    compile name: "metrics", group: "org.mcstats.bukkit", version: "R7"
+    compile name: "metrics", group: "org.mcstats.bukkit", version: "R8-SNAPSHOT"
+    //compile name: "ProtocolLib", group: "com.comphenix.protocol", version: "3.6.3-SNAPSHOT"
     testCompile group: 'junit', name: 'junit', version: '4.+'
     compile name: "BountifulAPI"
 }

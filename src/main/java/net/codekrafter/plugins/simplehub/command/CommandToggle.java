@@ -1,7 +1,7 @@
 package net.codekrafter.plugins.simplehub.command;
 
 import net.codekrafter.plugins.simplehub.SimpleHub;
-import net.codekrafter.plugins.utils.ColorParser;
+import net.codekrafter.plugins.utils.Parser;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -24,16 +24,16 @@ public class CommandToggle implements CommandModule {
 	@Override
 	public boolean run(CommandSender s, Command cmd, String l, String[] args) {
 		if (args.length == 1 || args[1] == null || args[1] == "" || args[1] == " ") {
-			s.sendMessage(ColorParser.parse("&8/" + cmd.getName()  + " " + usage));
+			s.sendMessage(Parser.colorparse("&8/" + cmd.getName()  + " " + usage));
 			return true;
 		}
 		Player p = Bukkit.getPlayer(args[1]);
 		if(SimpleHub.inHub.contains(p.getUniqueId().toString())) {
 			SimpleHub.inHub.remove(p.getUniqueId().toString());
-			s.sendMessage(SimpleHub.prefix + ColorParser.parse(" Successfully Toggled " + p.getName() + "'s Hub Status Off"));
+			s.sendMessage(SimpleHub.prefix + Parser.colorparse(" Successfully Toggled " + p.getName() + "'s Hub Status Off"));
 		} else {
 			SimpleHub.inHub.add(p.getUniqueId().toString());
-			s.sendMessage(SimpleHub.prefix + ColorParser.parse(" Successfully Toggled " + p.getName() + "'s Hub Status On"));
+			s.sendMessage(SimpleHub.prefix + Parser.colorparse(" Successfully Toggled " + p.getName() + "'s Hub Status On"));
 		}
 		return true;
 	}

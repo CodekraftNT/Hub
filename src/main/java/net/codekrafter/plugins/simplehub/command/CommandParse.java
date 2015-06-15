@@ -3,7 +3,7 @@ package net.codekrafter.plugins.simplehub.command;
 import java.util.ArrayList;
 
 import net.codekrafter.plugins.simplehub.SimpleHub;
-import net.codekrafter.plugins.utils.ColorParser;
+import net.codekrafter.plugins.utils.Parser;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -24,11 +24,11 @@ public class CommandParse implements CommandModule {
 	@Override
 	public boolean run(CommandSender s, Command cmd, String l, String[] args) {
 		if (args.length == 1 || args[1] == null || args[1] == "") {
-			s.sendMessage(ColorParser.parse("&8/" + cmd.getName()  + " " + usage));
+			s.sendMessage(Parser.colorparse("&8/" + cmd.getName()  + " " + usage));
 		}
 		ArrayList<String> parsed = new ArrayList<String>();
 		for (String s1 : args) {
-			parsed.add(ColorParser.parse(s1));
+			parsed.add(Parser.colorparse(s1));
 		}
 		parsed.remove(0);
 		for (String s1 : parsed) {
