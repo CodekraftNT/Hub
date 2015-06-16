@@ -1,36 +1,46 @@
 
-package net.codekrafter.plugins.simplehub.yaml;
+package net.codekrafter.plugins.utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 
-import net.codekrafter.plugins.simplehub.SimpleHub;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class YamlManager
 {
 
-	public static SimpleHub plugin;
+	public static JavaPlugin plugin;
+	public File path;
+	private FileConfiguration customConfig = null;
+	private File customConfigFile = null;
+	private String name;
 
-	public YamlManager(SimpleHub plugin, String name)
+	public YamlManager(JavaPlugin plugin, String name)
 	{
 		YamlManager.plugin = plugin;
 		this.name = name;
 	}
-
-	private FileConfiguration customConfig = null;
-	private File customConfigFile = null;
-	private String name;
+	
+	public YamlManager(JavaPlugin plugin, String name, String path, boolean relitiveToDataFolder)
+	{
+		YamlManager.plugin = plugin;
+		this.name = name;
+		if(relitiveToDataFolder) {
+			this.path = new File(plugin.getDataFolder(), path);
+		} else {
+			this.path = new File(path);
+		}
+	}
 
 	public void reloadCustomConfig()
 	{
 		if (customConfigFile == null)
 		{
-			customConfigFile = new File(plugin.getDataFolder(), name + ".yml");
+			customConfigFile = new File(path, name + ".yml");
 		}
 
 		customConfig = YamlConfiguration.loadConfiguration(customConfigFile);
@@ -73,7 +83,7 @@ public class YamlManager
 	{
 		if (customConfigFile == null)
 		{
-			customConfigFile = new File(plugin.getDataFolder(), name + ".yml");
+			customConfigFile = new File(path, name + ".yml");
 		}
 		if (!customConfigFile.exists())
 		{

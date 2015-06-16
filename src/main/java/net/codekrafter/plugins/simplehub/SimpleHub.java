@@ -10,8 +10,8 @@ import net.codekrafter.plugins.Game;
 import net.codekrafter.plugins.simplehub.command.CommandManager;
 import net.codekrafter.plugins.simplehub.events.HubListener;
 import net.codekrafter.plugins.simplehub.tasks.SaveTask;
-import net.codekrafter.plugins.simplehub.yaml.YamlManager;
 import net.codekrafter.plugins.utils.Parser;
+import net.codekrafter.plugins.utils.YamlManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
