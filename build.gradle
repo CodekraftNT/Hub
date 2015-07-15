@@ -1,5 +1,5 @@
 /*
- * Build Script For Simple Hub, The Lobby Plugin For Codekraft NT.
+ * Build Script For SimpleHub, The Hub Plugin For Codekraft
  */
 
 plugins {
@@ -70,7 +70,6 @@ dependencies {
 	compile name: "metrics", group: "org.mcstats.bukkit", version: "R8-SNAPSHOT"
 	//compile name: "ProtocolLib", group: "com.comphenix.protocol", version: "3.6.3-SNAPSHOT"
 	testCompile group: 'junit', name: 'junit', version: '4.+'
-	compile name: "BountifulAPI"
 }
 
 license {
