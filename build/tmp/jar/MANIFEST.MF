@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: Simple Hub
-Implementation-Version: 1.0
-Test-Entry: PASSED
-
