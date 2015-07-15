@@ -8,9 +8,8 @@ This is the official hub plugin of Codekraft, A Unique Minigames Network Featuri
 
 Our Hub Plugin uses Gradle as its build system. To clone and build the plugin from scratch:
 
-- `git clone --recursive https://github.com/caseif/Steel.git`
-- `cd Steel`
-- `cp scripts/* .git/hooks`
+- `git clone --recursive https://github.com/CodekraftNT/SimpleHub.git`
+- `cd SimpleHub`
 - `./gradlew` (`gradlew` or `sh ./gradlew` on Windows)
 
 ## Contributing
