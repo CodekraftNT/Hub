@@ -1,10 +1,27 @@
-
+/*
+ * 	SimpleHub
+ * 	The Hub Plugin For Codekraft
+ *
+ *     Copyright (C) 2015  codekrafter
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Lesser License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Lesser License for more details.
+ *
+ *     You should have received a copy of the GNU General Lesser License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package net.codekrafter.plugins.simplehub;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import net.codekrafter.plugins.Game;
 import net.codekrafter.plugins.simplehub.command.CommandManager;
@@ -15,8 +32,6 @@ import net.codekrafter.plugins.utils.YamlManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -77,7 +92,6 @@ public class SimpleHub extends JavaPlugin
 		 * TickTask tt = new TickTask(); tt.runTaskTimer(this, 0, 0);
 		 */
 
-		// mcstats
 		try
 		{
 			Metrics metrics = new Metrics(this);
@@ -104,21 +118,11 @@ public class SimpleHub extends JavaPlugin
 	{
 		saveConfigItems();
 		saveConfig();
-		gamesFile.saveCustomConfig();
 	}
 
 	private void saveConfigItems()
 	{
 		config.set("inHub", inHub);
-		for (Game g : games)
-		{
-
-			Map<String, Map<String, Object>> map = g.getContentsMap();
-			String name = g.getName();
-			gamesConfig.set("games." + name + ".other.command", map
-					.get("other").get("command"));
-			gamesConfig.set("games." + name + ".item", map.get("item"));
-		}
 		gamesFile.saveCustomConfig();
 
 	}
@@ -142,31 +146,10 @@ public class SimpleHub extends JavaPlugin
 	{
 		prefix = Parser.colorparse(config.getString("prefix") + "&8");
 		inHub = (List<String>) config.getList("inHub");
-
-		ConfigurationSection gamesConfig1 = gamesConfig
-				.getConfigurationSection("games");
-		Map<String, Object> values = gamesConfig1.getValues(false);
-		List<MemorySection> memsecs = new ArrayList<MemorySection>();
-		for (String s : values.keySet())
-		{
-			MemorySection memsec = (MemorySection) values.get(s);
-			memsecs.add(memsec);
-		}
-		for (MemorySection memsec : memsecs)
-		{
-			MemorySection issec = (MemorySection) memsec.get("item");
-			Map<String, Object> ismap = issec.getValues(false);
-			ItemStack is = ItemStack.deserialize(ismap);
-			Game g = new Game(
-					is, memsec.getString("other.command"),
-					memsec.getName());
-			games.add(g);
-		}
 	}
 
 	private void addDefaults()
 	{
 		config.addDefault("prefix", "&9Simple Hub>");
-		config.addDefault("inHub", new ArrayList<String>());
 	}
 }
