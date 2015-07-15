@@ -88,9 +88,7 @@ license {
 test { systemProperties 'property': 'value' }
 
 uploadArchives {
-	repositories {
-		flatDir { dirs 'repos' }
-	}
+	repositories { flatDir { dirs 'repos' } }
 }
 
 shadowJar {
