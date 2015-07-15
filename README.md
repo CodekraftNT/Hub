@@ -30,4 +30,3 @@ The Developers At Codekraft
 Look [here](doc/LICENSE_FULL).
 
 </content>
-<tabTrigger>readme</tabTrigger>
