@@ -1,5 +1,5 @@
 <content>
-# Hub
+# SimpleHub
 
 This is the official hub plugin of Codekraft, A Unique Minigames Network Featuring Minigames Like PvPKraft And Agent
 
