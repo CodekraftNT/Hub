@@ -1,4 +1,3 @@
-<snippet>
   <content><![CDATA[
 # ${1:Hub}
 
@@ -33,4 +32,3 @@ TODO: Write credits
 TODO: Write license
 ]]></content>
   <tabTrigger>readme</tabTrigger>
-</snippet>
