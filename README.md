@@ -1,15 +1,17 @@
-  <content>
-# ${1:Hub}
+<content>
+# Hub
 
-TODO: Write a project description
+This is the official hub plugin of Codekraft, A Unique Minigames Network Featuring Minigames Like PvPKraft And Agent
 
-## Installation
 
-TODO: Describe the installation process
+### Building
 
-## Usage
+Our Hub Plugin uses Gradle as its build system. To clone and build the plugin from scratch:
 
-TODO: Write usage instructions
+- `git clone --recursive https://github.com/caseif/Steel.git`
+- `cd Steel`
+- `cp scripts/* .git/hooks`
+- `./gradlew` (`gradlew` or `sh ./gradlew` on Windows)
 
 ## Contributing
 
@@ -19,16 +21,13 @@ TODO: Write usage instructions
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
-## History
-
-TODO: Write history
-
 ## Credits
 
-TODO: Write credits
+The Developers At Codekraft
 
 ## License
 
-TODO: Write license
+Look [here](doc/LICENSE_FULL).
+
 </content>
-  <tabTrigger>readme</tabTrigger>
+<tabTrigger>readme</tabTrigger>
