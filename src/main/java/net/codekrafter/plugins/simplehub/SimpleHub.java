@@ -17,6 +17,7 @@
  *     You should have received a copy of the GNU General Lesser License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package net.codekrafter.plugins.simplehub;
 
 import java.io.IOException;
@@ -45,13 +46,14 @@ public class SimpleHub extends JavaPlugin
 {
 
 	public FileConfiguration config = getConfig();
-	public static String prefix = Parser.colorparse("&9Simple Hub>&8");
+	public static String prefix = Parser.colorparse("&9Hub>&8");
 	public static List<String> inHub = new ArrayList<String>();
 	public SaveTask saveTask = new SaveTask(this);
 	public static Inventory hubInv = Bukkit.createInventory(null,
 			InventoryType.PLAYER);
 	public static Yaml yaml = new Yaml();
 	public static List<Game> games = new ArrayList<Game>();
+	public static ItemStack[] pvpArmor;
 	public YamlManager gamesFile = new YamlManager(this, "games");
 	FileConfiguration gamesConfig = gamesFile.getCustomConfig();
 
@@ -146,10 +148,23 @@ public class SimpleHub extends JavaPlugin
 	{
 		prefix = Parser.colorparse(config.getString("prefix") + "&8");
 		inHub = (List<String>) config.getList("inHub");
+		ItemStack defHelm = new ItemStack(Material.IRON_HELMET);
+		ItemStack defChest = new ItemStack(Material.IRON_CHESTPLATE);
+		ItemStack defPants = new ItemStack(Material.IRON_LEGGINGS);
+		ItemStack defBoots = new ItemStack(Material.IRON_BOOTS);
+		ItemStack helm = config.getItemStack("pvp.armor.helm", defHelm);
+		ItemStack chest = config.getItemStack("pvp.armor.chest", defChest);
+		ItemStack pants = config.getItemStack("pvp.armor.pants", defPants);
+		ItemStack boots = config.getItemStack("pvp.armor.boots", defBoots);
+		pvpArmor = new ItemStack[4];
+		pvpArmor[0] = helm;
+		pvpArmor[1] = chest;
+		pvpArmor[2] = pants;
+		pvpArmor[3] = boots;
 	}
 
 	private void addDefaults()
 	{
-		config.addDefault("prefix", "&9Simple Hub>");
+		config.addDefault("prefix", "&9Hub>&8");
 	}
 }

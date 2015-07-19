@@ -31,7 +31,7 @@ public class CommandParse implements CommandModule {
 
 	public CommandManager cm;
 	public SimpleHub plugin;
-	private String name = "Parse";
+	private String name = "parse";
 	private String desc = "Parsed The String You Give It For Color Codes &4(DEBUG)";
 	private String usage = "&8parse <messages..>";
 

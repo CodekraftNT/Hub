@@ -17,10 +17,10 @@
  *     You should have received a copy of the GNU General Lesser License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package net.codekrafter.plugins.simplehub.events;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import net.codekrafter.plugins.Game;
@@ -43,6 +43,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
@@ -51,12 +52,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -74,16 +75,19 @@ public class HubListener implements Listener
 			{
 				e.setCancelled(true);
 				p.updateInventory();
+				updateInventory(p);
 				InventoryType type = e.getInventory().getType();
 				if (type == InventoryType.PLAYER)
 				{
 					e.setCancelled(true);
 					p.updateInventory();
+					updateInventory(p);
 				}
 				else if (type == InventoryType.CHEST)
 				{
 					e.setCancelled(true);
 					p.updateInventory();
+					updateInventory(p);
 					ItemStack is = e.getCurrentItem();
 					ItemMeta meta = is.getItemMeta();
 					Bukkit.getLogger().info(is.getType().name());
@@ -91,8 +95,9 @@ public class HubListener implements Listener
 					for (Game g : SimpleHub.games)
 					{
 						ItemStack is1 = g.getIs();
-						if (Parser.colorparse(is1.getItemMeta()
-								.getDisplayName()).equalsIgnoreCase(name));
+						if (Parser.colorparse(
+								is1.getItemMeta().getDisplayName())
+								.equalsIgnoreCase(name)) ;
 						{
 							Bukkit.getServer().dispatchCommand(
 									Bukkit.getServer().getConsoleSender(),
@@ -107,9 +112,55 @@ public class HubListener implements Listener
 
 	private void updateInventory(Player p)
 	{
-		PlayerInventory pinv = p.getInventory();
-		pinv.setContents(SimpleHub.hubInv.getContents());
+		PlayerInventory inv = p.getInventory();
 
+		ItemMeta metaGames = new ItemStack(Material.COMPASS).getItemMeta();
+		metaGames.setDisplayName(Parser.colorparse(SimpleHub.prefix
+				+ " &8Game Selector"));
+
+		ItemStack games = new ItemStack(Material.COMPASS);
+		games.setItemMeta(metaGames);
+
+		ItemMeta metaGun = new ItemStack(Material.DIAMOND_BARDING)
+				.getItemMeta();
+		metaGun.setDisplayName(Parser.colorparse(SimpleHub.prefix
+				+ " &8Fun Gun"));
+
+		ItemStack gun = new ItemStack(Material.DIAMOND_BARDING);
+		gun.setItemMeta(metaGun);
+
+		ItemMeta metaSword = new ItemStack(Material.DIAMOND_BARDING)
+				.getItemMeta();
+		metaSword.setDisplayName(Parser.colorparse(SimpleHub.prefix
+				+ " &8PvP Sword"));
+
+		ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+		sword.setItemMeta(metaSword);
+
+		ItemMeta metaClock = new ItemStack(Material.WATCH).getItemMeta();
+		if (hasHidden.contains(p.getName()))
+		{
+			metaClock.setDisplayName("§9Magic Clock> §8Players Hidden");
+		}
+		else
+		{
+			metaClock.setDisplayName("§9Magic Clock> §8Players Visible");
+		}
+
+		ItemStack clock = new ItemStack(Material.WATCH);
+		clock.setItemMeta(metaClock);
+
+		inv.setItem(0, games);
+		inv.setItem(1, gun);
+		inv.setItem(2, new ItemStack(Material.AIR));
+		inv.setItem(3, new ItemStack(Material.AIR));
+		inv.setItem(4, sword);
+		inv.setItem(5, new ItemStack(Material.AIR));
+		inv.setItem(6, new ItemStack(Material.AIR));
+		inv.setItem(7, new ItemStack(Material.AIR));
+		inv.setItem(8, clock);
+
+		p.updateInventory();
 	}
 
 	@EventHandler
@@ -122,6 +173,7 @@ public class HubListener implements Listener
 		{
 			e.setCancelled(true);
 			p.getInventory().setContents(c);
+			updateInventory(p);
 		}
 	}
 
@@ -132,6 +184,7 @@ public class HubListener implements Listener
 		if (SimpleHub.inHub.contains(p.getUniqueId().toString()))
 		{
 			e.setCancelled(true);
+			updateInventory(p);
 		}
 	}
 
@@ -142,6 +195,7 @@ public class HubListener implements Listener
 		if (SimpleHub.inHub.contains(p.getUniqueId().toString()))
 		{
 			e.setCancelled(true);
+			updateInventory(p);
 		}
 	}
 
@@ -155,75 +209,34 @@ public class HubListener implements Listener
 			{
 				e.setCancelled(true);
 				p.updateInventory();
+				updateInventory(p);
 			}
 		}
 	}
 
-	HashMap<String, Boolean> cooldown = new HashMap<String, Boolean>();
-	List<String> fixed = new ArrayList<String>();
-
-	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void PlayerMove(PlayerMoveEvent e)
+	public void onPlayerMove(PlayerMoveEvent e)
 	{
 		Player p = e.getPlayer();
-
-		if (p.getAllowFlight() == true && !fixed.contains(p))
-		{
-			p.setFlying(false);
-			p.setAllowFlight(false);
-			fixed.add(p.getUniqueId().toString());
-		}
-
-		if (p.getGameMode() == GameMode.CREATIVE) return;
-
-		if (cooldown.get(p) != null && cooldown.get(p) == true)
+		if (p.getGameMode() != GameMode.CREATIVE
+				&& p.getLocation().subtract(0, 1, 0).getBlock().getType() != Material.AIR
+				&& !p.isFlying())
 		{
 			p.setAllowFlight(true);
 		}
-		else
-		{
-			p.setAllowFlight(false);
-		}
-
-		Location loc = p.getLocation();
-		loc.setY(p.getLocation().getY() - 1);
-		if (loc.getBlock().getType() != Material.AIR)
-		{
-			cooldown.put(p.getUniqueId().toString(), true);
-		}
-
-		if (cooldown.get(p) != null && cooldown.get(p) == false)
-		{
-			for (Player pl : Bukkit.getOnlinePlayers())
-			{
-				pl.playEffect(p.getLocation(), Effect.MOBSPAWNER_FLAMES, 2004);
-			}
-		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void onFly(PlayerToggleFlightEvent e)
+	public void onPlayerToggleFlight(PlayerToggleFlightEvent e)
 	{
 		Player p = e.getPlayer();
-
 		if (p.getGameMode() == GameMode.CREATIVE) return;
-		if (cooldown.get(p) == true)
-		{
-			e.setCancelled(true);
-			cooldown.put(p.getUniqueId().toString(), false);
-			p.setVelocity(p.getLocation().getDirection().multiply(1.6D)
-					.setY(1.0D));
+		e.setCancelled(true);
+		p.setAllowFlight(false);
+		p.setFlying(false);
+		p.setVelocity(p.getLocation().getDirection().multiply(1.5).setY(1));
+		p.playSound(p.getLocation(), Sound.CAT_MEOW, 10, 0);
 
-			for (Player pl : Bukkit.getOnlinePlayers())
-			{
-				pl.playEffect(p.getLocation(), Effect.POTION_BREAK, 16451);
-				pl.playSound(pl.getLocation(), Sound.GHAST_FIREBALL, 10, 10);
-			}
-
-			p.setAllowFlight(false);
-		}
 	}
 
 	@EventHandler
@@ -329,7 +342,6 @@ public class HubListener implements Listener
 			{
 				inv.addItem(g.getIs());
 			}
-			InventoryView invv = p.openInventory(inv);
 			return;
 		}
 	}
@@ -368,6 +380,7 @@ public class HubListener implements Listener
 				}
 			}
 		}
+		updateInventory(e.getPlayer());
 	}
 
 	@EventHandler
@@ -375,6 +388,90 @@ public class HubListener implements Listener
 	{
 		e.setQuitMessage(Parser.colorparse("&8[&4-&8] "
 				+ e.getPlayer().getName()));
+	}
+
+	List<String> inpvp = new ArrayList<String>();
+
+	@EventHandler
+	public void PlayerItemHeld(PlayerItemHeldEvent e)
+	{
+		Player p = e.getPlayer();
+		if (SimpleHub.inHub.contains(p.getName()))
+		{
+			if (p.getInventory().getItem(e.getNewSlot()).getType() == Material.DIAMOND_SWORD
+					|| p.getItemInHand().getType() == Material.DIAMOND_SWORD)
+			{
+				inpvp.add(p.getName());
+				p.sendMessage(Parser.colorparse(SimpleHub.prefix
+						+ " &8You Activated Lobby PvP"));
+				Bukkit.getServer().getPluginManager()
+						.callEvent(new LobbyPvPStatusChangeEvent(p, true));
+			}
+			else if (p.getInventory().getItem(e.getPreviousSlot()).getType() == Material.DIAMOND_SWORD)
+			{
+				if (inpvp.contains(p.getName()))
+				{
+					inpvp.remove(p.getName());
+				}
+
+				p.sendMessage(Parser.colorparse(SimpleHub.prefix
+						+ " &8You De-Activated Lobby PvP"));
+				Bukkit.getServer().getPluginManager()
+						.callEvent(new LobbyPvPStatusChangeEvent(p, false));
+			}
+		}
+	}
+
+	@EventHandler
+	public void EntityDamageByEntity(EntityDamageByEntityEvent e)
+	{
+		if (e.getEntity().getType() == EntityType.PLAYER
+				&& e.getDamager().getType() == EntityType.PLAYER)
+		{
+			Player p = (Player) e.getEntity();
+			Player d = (Player) e.getDamager();
+
+			if (p.getItemInHand().getType() == Material.DIAMOND_SWORD)
+			{
+				inpvp.add(p.getName());
+				Bukkit.getServer().getPluginManager()
+						.callEvent(new LobbyPvPStatusChangeEvent(p, true));
+			}
+
+			if (d.getItemInHand().getType() == Material.DIAMOND_SWORD)
+			{
+				inpvp.add(d.getName());
+				Bukkit.getServer().getPluginManager()
+						.callEvent(new LobbyPvPStatusChangeEvent(d, true));
+			}
+
+			if (!inpvp.contains(d))
+			{
+				d.sendMessage(Parser.colorparse(SimpleHub.prefix
+						+ " &4You Are Not In Lobby PvP Mode"));
+				e.setCancelled(true);
+			}
+			else if (inpvp.contains(d) && !inpvp.contains(p))
+			{
+				d.sendMessage(Parser.colorparse(SimpleHub.prefix + " &8"
+						+ p.getDisplayName() + "&4Is Not In Lobby PvP Mode"));
+				e.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler
+	public void LobbyPvPStatusChange(LobbyPvPStatusChangeEvent e)
+	{
+		Player p = e.p;
+		if (e.change)
+		{
+			p.getInventory().setArmorContents(SimpleHub.pvpArmor);
+		}
+		else if (!e.change)
+		{
+			p.getInventory().setArmorContents(new ItemStack[4]);
+		}
 	}
 
 }

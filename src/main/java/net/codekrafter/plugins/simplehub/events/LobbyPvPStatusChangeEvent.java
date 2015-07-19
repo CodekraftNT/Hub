@@ -18,57 +18,46 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * 
+ * @author codekrafter
+ *
  */
-package net.codekrafter.plugins.simplehub.command;
+package net.codekrafter.plugins.simplehub.events;
 
-import net.codekrafter.plugins.simplehub.SimpleHub;
-import net.codekrafter.plugins.utils.Parser;
-
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+
 
 /**
  * @author codekrafter
  *
  */
-public class CommandSetInv implements CommandModule {
-
-	private String name = "SetInv";
-	private String desc = "Set The Hub Inventory";
-	private String usage = "setinv";
-	private CommandManager cm;
+public class LobbyPvPStatusChangeEvent extends Event
+{
 
 	/**
 	 * @author codekrafter
-	 * @param commandManager
+	 *
+	 * @param change
+	 * @param p
 	 */
-	public CommandSetInv(CommandManager cm)
+	public LobbyPvPStatusChangeEvent(Player p, boolean change)
 	{
-		this.cm = cm;
+		this.change = change;
+		this.p = p;
 	}
 
+	HandlerList handlers = new HandlerList();
+	boolean change;
+	Player p;
+	
+	/* (non-Javadoc)
+	 * @see org.bukkit.event.Event#getHandlers()
+	 */
 	@Override
-	public boolean run(CommandSender s, Command cmd, String l, String[] args) {
-		if (s instanceof Player) {
-			Player p = (Player) s;
-			SimpleHub.hubInv = p.getInventory();
-		}
-		return true;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public String getDesc() {
-
-		return desc;
+	public HandlerList getHandlers()
+	{
+		return handlers;
 	}
 
 }

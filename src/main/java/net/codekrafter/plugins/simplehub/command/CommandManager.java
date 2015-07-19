@@ -39,15 +39,20 @@ public class CommandManager implements CommandExecutor {
 		cmds.add(parse);
 		CommandToggle toggle = new CommandToggle(this);
 		cmds.add(toggle);
-		CommandSetInv setInv = new CommandSetInv(this);
-		cmds.add(setInv);
+		ArrayList<CommandModule> cmds0 = new ArrayList<CommandModule>();
+		for(CommandModule c : cmds) {
+			if(!cmds0.contains(c)) {
+				cmds0.add(c);
+			}
+		}
+		cmds = cmds0;
 	}
 
 	@Override
 	public boolean onCommand(CommandSender s, Command cmd, String l,
 			String[] args) {
-		if (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("")
-				|| args[0].equalsIgnoreCase(" ") || args[0].equals(null)) {
+		if (args.length == 0 || args[0] == null || args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("")
+				|| args[0].equalsIgnoreCase(" ")) {
 			s.sendMessage(Parser
 					.colorparse("&8Commands For &9Simple Hub&8:"));
 			for (CommandModule cmd1 : cmds) {
