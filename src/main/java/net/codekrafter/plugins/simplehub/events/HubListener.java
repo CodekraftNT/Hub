@@ -154,7 +154,8 @@ public class HubListener implements Listener
 		inv.setItem(1, gun);
 		inv.setItem(2, new ItemStack(Material.AIR));
 		inv.setItem(3, new ItemStack(Material.AIR));
-		inv.setItem(4, sword);
+		//inv.setItem(4, sword);
+		inv.setItem(4, new ItemStack(Material.AIR));
 		inv.setItem(5, new ItemStack(Material.AIR));
 		inv.setItem(6, new ItemStack(Material.AIR));
 		inv.setItem(7, new ItemStack(Material.AIR));
@@ -390,7 +391,7 @@ public class HubListener implements Listener
 				+ e.getPlayer().getName()));
 	}
 
-	List<String> inpvp = new ArrayList<String>();
+	public static List<String> inpvp = new ArrayList<String>();
 
 	@EventHandler
 	public void PlayerItemHeld(PlayerItemHeldEvent e)
@@ -401,21 +402,11 @@ public class HubListener implements Listener
 			if (p.getInventory().getItem(e.getNewSlot()).getType() == Material.DIAMOND_SWORD
 					|| p.getItemInHand().getType() == Material.DIAMOND_SWORD)
 			{
-				inpvp.add(p.getName());
-				p.sendMessage(Parser.colorparse(SimpleHub.prefix
-						+ " &8You Activated Lobby PvP"));
 				Bukkit.getServer().getPluginManager()
 						.callEvent(new LobbyPvPStatusChangeEvent(p, true));
 			}
 			else if (p.getInventory().getItem(e.getPreviousSlot()).getType() == Material.DIAMOND_SWORD)
 			{
-				if (inpvp.contains(p.getName()))
-				{
-					inpvp.remove(p.getName());
-				}
-
-				p.sendMessage(Parser.colorparse(SimpleHub.prefix
-						+ " &8You De-Activated Lobby PvP"));
 				Bukkit.getServer().getPluginManager()
 						.callEvent(new LobbyPvPStatusChangeEvent(p, false));
 			}
@@ -431,20 +422,11 @@ public class HubListener implements Listener
 			Player p = (Player) e.getEntity();
 			Player d = (Player) e.getDamager();
 
-			if (p.getItemInHand().getType() == Material.DIAMOND_SWORD)
-			{
-				inpvp.add(p.getName());
-				Bukkit.getServer().getPluginManager()
-						.callEvent(new LobbyPvPStatusChangeEvent(p, true));
+			if(inpvp.contains(p.getName())) {
+				System.out.println("The Player Is In PvP Mode");
+			} else {
+				System.out.println("The Player Is Not In PvP Mode");
 			}
-
-			if (d.getItemInHand().getType() == Material.DIAMOND_SWORD)
-			{
-				inpvp.add(d.getName());
-				Bukkit.getServer().getPluginManager()
-						.callEvent(new LobbyPvPStatusChangeEvent(d, true));
-			}
-
 			if (!inpvp.contains(d))
 			{
 				d.sendMessage(Parser.colorparse(SimpleHub.prefix
@@ -467,10 +449,19 @@ public class HubListener implements Listener
 		if (e.change)
 		{
 			p.getInventory().setArmorContents(SimpleHub.pvpArmor);
+			p.sendMessage(Parser.colorparse(SimpleHub.prefix
+					+ " &8You Activated Lobby PvP"));
+			inpvp.add(p.getName());
 		}
 		else if (!e.change)
 		{
 			p.getInventory().setArmorContents(new ItemStack[4]);
+			p.sendMessage(Parser.colorparse(SimpleHub.prefix
+					+ " &8You De-Activated Lobby PvP"));
+			if (inpvp.contains(p.getName()))
+			{
+				inpvp.remove(p.getName());
+			}
 		}
 	}
 

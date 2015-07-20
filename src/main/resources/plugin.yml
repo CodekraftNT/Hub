@@ -15,3 +15,6 @@ commands:
     shub:
           description: The Base Simple Hub Command
           usage: /shub <subcommands>
+#    pvp:
+#          description: Toggles PvP
+#          usage: /pvp

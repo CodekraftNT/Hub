@@ -47,7 +47,7 @@ public class LobbyPvPStatusChangeEvent extends Event
 		this.p = p;
 	}
 
-	HandlerList handlers = new HandlerList();
+	static HandlerList handlers = new HandlerList();
 	boolean change;
 	Player p;
 	
@@ -58,6 +58,10 @@ public class LobbyPvPStatusChangeEvent extends Event
 	public HandlerList getHandlers()
 	{
 		return handlers;
+	}
+	
+	public static HandlerList getHandlerList() {
+	    return handlers;
 	}
 
 }

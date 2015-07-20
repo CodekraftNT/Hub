@@ -81,6 +81,7 @@ public class SimpleHub extends JavaPlugin
 		commands.add("simplehub");
 		commands.add("simpleh");
 		commands.add("shub");
+		commands.add("pvp");
 		for (String s : commands)
 		{
 			getServer().getPluginCommand(s).setExecutor(
@@ -157,14 +158,15 @@ public class SimpleHub extends JavaPlugin
 		ItemStack pants = config.getItemStack("pvp.armor.pants", defPants);
 		ItemStack boots = config.getItemStack("pvp.armor.boots", defBoots);
 		pvpArmor = new ItemStack[4];
-		pvpArmor[0] = helm;
-		pvpArmor[1] = chest;
-		pvpArmor[2] = pants;
-		pvpArmor[3] = boots;
+		pvpArmor[3] = helm;
+		pvpArmor[2] = chest;
+		pvpArmor[1] = pants;
+		pvpArmor[0] = boots;
 	}
 
 	private void addDefaults()
 	{
 		config.addDefault("prefix", "&9Hub>&8");
 	}
+
 }
