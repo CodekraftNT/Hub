@@ -1,7 +1,7 @@
 name: SimpleHub
 main: net.codekrafter.plugins.simplehub.SimpleHub
-version: 0.0.1
-softdepend: [ProtocolLib]
+version: 1.0.0
+authors: ["codekrafter"]
 commands:
     sh:
           description: The Base Simple Hub Command
