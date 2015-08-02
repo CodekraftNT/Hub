@@ -21,11 +21,16 @@
 package net.codekrafter.plugins.simplehub.command;
 
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 import net.codekrafter.plugins.simplehub.SimpleHub;
 import net.codekrafter.plugins.simplehub.events.HubListener;
 import net.codekrafter.plugins.simplehub.events.LobbyPvPStatusChangeEvent;
 import net.codekrafter.plugins.utils.Parser;
+import net.md_5.bungee.api.Callback;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.ServerPing;
+import net.md_5.bungee.api.config.ServerInfo;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -68,11 +73,13 @@ public class CommandManager implements CommandExecutor
 				Player p = (Player) s;
 				if (HubListener.inpvp.contains(p.getName()))
 				{
-					Bukkit.getServer().getPluginManager().callEvent(new LobbyPvPStatusChangeEvent(p, false));
+					Bukkit.getServer().getPluginManager()
+							.callEvent(new LobbyPvPStatusChangeEvent(p, false));
 				}
 				else
 				{
-					Bukkit.getServer().getPluginManager().callEvent(new LobbyPvPStatusChangeEvent(p, true));
+					Bukkit.getServer().getPluginManager()
+							.callEvent(new LobbyPvPStatusChangeEvent(p, true));
 				}
 			}
 			else

@@ -23,9 +23,11 @@ package net.codekrafter.plugins.simplehub.events;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.codekrafter.plugins.Game;
+import net.codekrafter.plugins.simplehub.Game;
+import net.codekrafter.plugins.simplehub.ServerFinder;
 import net.codekrafter.plugins.simplehub.SimpleHub;
 import net.codekrafter.plugins.utils.Parser;
+import net.md_5.bungee.api.config.ServerInfo;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -62,8 +64,18 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+
 public class HubListener implements Listener
 {
+
+	SimpleHub pl;
+
+	public HubListener(SimpleHub plugin)
+	{
+		pl = plugin;
+	}
 
 	@EventHandler
 	public void InventoryClick(InventoryClickEvent e)
@@ -71,7 +83,7 @@ public class HubListener implements Listener
 		if (e.getWhoClicked() instanceof Player)
 		{
 			Player p = (Player) e.getWhoClicked();
-			if (SimpleHub.inHub.contains(p.getUniqueId().toString()))
+			if (/* SimpleHub.inHub.contains(p.getUniqueId().toString() */true)
 			{
 				e.setCancelled(true);
 				p.updateInventory();
@@ -90,7 +102,6 @@ public class HubListener implements Listener
 					updateInventory(p);
 					ItemStack is = e.getCurrentItem();
 					ItemMeta meta = is.getItemMeta();
-					Bukkit.getLogger().info(is.getType().name());
 					String name = meta.getDisplayName();
 					for (Game g : SimpleHub.games)
 					{
@@ -99,9 +110,14 @@ public class HubListener implements Listener
 								is1.getItemMeta().getDisplayName())
 								.equalsIgnoreCase(name)) ;
 						{
-							Bukkit.getServer().dispatchCommand(
-									Bukkit.getServer().getConsoleSender(),
-									Parser.commandparse(g.getCommand(), p));
+
+							ByteArrayDataOutput out = ByteStreams
+									.newDataOutput();
+							out.writeUTF("Connect");
+							out.writeUTF(g.getCommand());
+							p.sendPluginMessage(pl, "BungeeCord",
+									out.toByteArray());
+
 							return;
 						}
 					}
@@ -154,7 +170,7 @@ public class HubListener implements Listener
 		inv.setItem(1, gun);
 		inv.setItem(2, new ItemStack(Material.AIR));
 		inv.setItem(3, new ItemStack(Material.AIR));
-		//inv.setItem(4, sword);
+		// inv.setItem(4, sword);
 		inv.setItem(4, new ItemStack(Material.AIR));
 		inv.setItem(5, new ItemStack(Material.AIR));
 		inv.setItem(6, new ItemStack(Material.AIR));
@@ -170,7 +186,7 @@ public class HubListener implements Listener
 		Player p = e.getPlayer();
 		PlayerInventory i = p.getInventory();
 		ItemStack[] c = i.getContents();
-		if (SimpleHub.inHub.contains(p.getUniqueId().toString()))
+		if (/* SimpleHub.inHub.contains(p.getUniqueId().toString() */true)
 		{
 			e.setCancelled(true);
 			p.getInventory().setContents(c);
@@ -182,7 +198,7 @@ public class HubListener implements Listener
 	public void BlockBreak(BlockBreakEvent e)
 	{
 		Player p = e.getPlayer();
-		if (SimpleHub.inHub.contains(p.getUniqueId().toString()))
+		if (/* SimpleHub.inHub.contains(p.getUniqueId().toString() */true)
 		{
 			e.setCancelled(true);
 			updateInventory(p);
@@ -193,7 +209,7 @@ public class HubListener implements Listener
 	public void BlockPlace(BlockPlaceEvent e)
 	{
 		Player p = e.getPlayer();
-		if (SimpleHub.inHub.contains(p.getUniqueId().toString()))
+		if (/* SimpleHub.inHub.contains(p.getUniqueId().toString() */true)
 		{
 			e.setCancelled(true);
 			updateInventory(p);
@@ -206,7 +222,7 @@ public class HubListener implements Listener
 		if (e.getEntity() instanceof Player)
 		{
 			Player p = (Player) e.getEntity();
-			if (SimpleHub.inHub.contains(p.getUniqueId().toString()))
+			if (/* SimpleHub.inHub.contains(p.getUniqueId().toString() */true)
 			{
 				e.setCancelled(true);
 				p.updateInventory();
@@ -246,7 +262,7 @@ public class HubListener implements Listener
 		if (e.getEntity() instanceof Player)
 		{
 			Player p = (Player) e.getEntity();
-			if (SimpleHub.inHub.contains(p.getUniqueId().toString()))
+			if (/* SimpleHub.inHub.contains(p.getUniqueId().toString() */true)
 			{
 				if (e.getCause() == DamageCause.FALL)
 				{
@@ -262,7 +278,7 @@ public class HubListener implements Listener
 	public void PlayerInteract(PlayerInteractEvent e)
 	{
 		Player p = e.getPlayer();
-		if (SimpleHub.inHub.contains(p.getUniqueId().toString())
+		if (/* SimpleHub.inHub.contains(p.getUniqueId().toString() */true
 				&& p.getItemInHand().getType() == Material.DIAMOND_BARDING
 				&& (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK))
 		{
@@ -273,7 +289,7 @@ public class HubListener implements Listener
 			p.getItemInHand().setItemMeta(meta);
 		}
 
-		if (SimpleHub.inHub.contains(p.getUniqueId().toString())
+		if (/* SimpleHub.inHub.contains(p.getUniqueId().toString() */true
 				&& p.getItemInHand().getType() == Material.WATCH
 				&& (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK))
 		{
@@ -313,7 +329,7 @@ public class HubListener implements Listener
 				}
 			}
 		}
-		else if (SimpleHub.inHub.contains(p.getUniqueId().toString())
+		else if (/* SimpleHub.inHub.contains(p.getUniqueId().toString() */true
 				&& p.getItemInHand().getType() == Material.COMPASS
 				&& (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK))
 		{
@@ -337,12 +353,14 @@ public class HubListener implements Listener
 				size1 += 8;
 				size = size1 - (size1 % 9);
 			}
+
 			Inventory inv = Bukkit.createInventory(p, size,
-					Parser.colorparse("               &9&lGames"));
+					Parser.colorparse("&9&lGames"));
 			for (Game g : SimpleHub.games)
 			{
 				inv.addItem(g.getIs());
 			}
+			p.openInventory(inv);
 			return;
 		}
 	}
@@ -422,9 +440,12 @@ public class HubListener implements Listener
 			Player p = (Player) e.getEntity();
 			Player d = (Player) e.getDamager();
 
-			if(inpvp.contains(p.getName())) {
+			if (inpvp.contains(p.getName()))
+			{
 				System.out.println("The Player Is In PvP Mode");
-			} else {
+			}
+			else
+			{
 				System.out.println("The Player Is Not In PvP Mode");
 			}
 			if (!inpvp.contains(d))

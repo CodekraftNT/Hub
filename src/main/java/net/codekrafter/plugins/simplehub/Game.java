@@ -23,7 +23,7 @@
  * @version 1.0
  */
 
-package net.codekrafter.plugins;
+package net.codekrafter.plugins.simplehub;
 
 import java.util.HashMap;
 import java.util.Map;

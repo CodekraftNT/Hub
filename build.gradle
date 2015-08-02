@@ -65,6 +65,7 @@ dependencies {
 	compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
 	compile name: "spigot-api", group: "org.spigotmc", version: "1.8.7-R0.1-SNAPSHOT"
 	compile name: "bungeecord-chat", group: "net.md-5", version: "1.8-SNAPSHOT"
+	compile name: "bungeecord-api", group: "net.md-5", version: "1.8-SNAPSHOT"
 	compile name: "snakeyaml", group: "org.yaml", version: "1.16-SNAPSHOT"
 	compile name: "updater", group: "net.gravitydevelopment.updater", version: "2.1"
 	compile name: "metrics", group: "org.mcstats.bukkit", version: "R8-SNAPSHOT"
@@ -88,7 +89,8 @@ license {
 test { systemProperties 'property': 'value' }
 
 uploadArchives {
-	repositories { flatDir { dirs 'repos' } }
+	repositories { flatDir { dirs 'repos'
+		} }
 }
 
 shadowJar {
@@ -98,6 +100,7 @@ shadowJar {
 
 	relocate 'org.mcstats', 'net.codekrafter.plugins.simplehub.mcstats'
 	relocate 'net.gravitydevelopment.updater', 'net.codekrafter.plugins.simplehub.updater'
+	relocate 'net.md_5.bungee.api', 'net.codekrafter.lib.bungee.api'
 
 	exclude 'META-INF/*.DSA'
 	exclude 'META-INF/*.RSA'
