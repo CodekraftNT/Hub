@@ -40,7 +40,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
-import org.yaml.snakeyaml.Yaml;
 
 public class SimpleHub extends JavaPlugin
 {
@@ -51,7 +50,6 @@ public class SimpleHub extends JavaPlugin
 	public SaveTask saveTask = new SaveTask(this);
 	public static Inventory hubInv = Bukkit.createInventory(null,
 			InventoryType.PLAYER);
-	public static Yaml yaml = new Yaml();
 	public static List<Game> games = new ArrayList<Game>();
 	public static ItemStack[] pvpArmor;
 	public YamlManager gamesFile = new YamlManager(this, "games");
